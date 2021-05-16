@@ -34,6 +34,25 @@ app.get('/gradovi', function(request, response){
   });
 
 });
+
+app.post("/grad", function(req, res) {
+  var id = req.body.id;
+  var naziv = req.body.naziv;
+  var broj_stanovnika = req.body.broj_stanovnika;
+  console.log(id + " " + naziv + " " + broj_stanovnika);
+  
+  db.run(`INSERT INTO grad VALUES(?,?,?)`, [id, naziv, broj_stanovnika], function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+    // get the last insert id
+    console.log(`A row has been inserted with rowid ${this.lastID}`);
+  });
+
+  res.status(200).send({
+    message: "Grad je dodan!"
+ });
+});
 app.listen(6543, () => console.log('server started'));
 
 /*
