@@ -35,6 +35,17 @@ app.get('/gradovi', function(request, response){
 
 });
 
+app.get('/gradovi/:id', function(request, response){
+  const {id} = request.params;
+  console.log(id);
+  db.each(`select * from grad where id=?`, [id], function(err, results){
+    if (err) {
+      return console.log(err.message);
+    }
+    response.send(results);
+  });
+});
+
 app.post("/grad", function(req, res) {
   var id = req.body.id;
   var naziv = req.body.naziv;
@@ -53,6 +64,40 @@ app.post("/grad", function(req, res) {
     message: "Grad je dodan!"
  });
 });
+
+app.put('/gradovi:id', (req, res) => {
+  const { id } = req.params;
+
+  db.run(`UPDATE grad
+  SET broj_stanovnika=?
+  WHERE id=?`, 
+    [req.body.broj_stanovnika, id],
+    function(error){
+        console.log("Update complete " + this.lastID);
+    }
+);
+  
+res.status(200).send({
+  message: "Grad je promijenjen!"
+});
+});
+
+app.delete('/gradovi:id', (req, res) => {
+  const { id } = req.params;
+  
+  db.run(`DELETE FROM grad WHERE id=?`, 
+    [id],
+    function(error){
+        console.log("");
+    }
+);
+  
+res.status(200).send({
+  message: "Grad je obrisan!"
+});
+});
+
+
 app.listen(6543, () => console.log('server started'));
 
 /*
