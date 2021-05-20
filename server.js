@@ -82,15 +82,15 @@ res.status(200).send({
 });
 });
 
-app.delete('/gradovi:id', (req, res) => {
+app.delete('/gradovi/:id', (req, res) => {
   const { id } = req.params;
   
-  db.run(`DELETE FROM grad WHERE id=?`, 
-    [id],
-    function(error){
-        console.log("");
-    }
-);
+    db.run(`DELETE FROM grad WHERE id=?`, 
+      [id],
+      function(error){
+          console.log("");
+      }
+  );
   
 res.status(200).send({
   message: "Grad je obrisan!"
@@ -108,3 +108,4 @@ db.close((err) => {
     console.log('Close the database connection.');
   });
 */
+module.exports = app;
